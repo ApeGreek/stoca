@@ -1,0 +1,23 @@
+name: Build WoLong Fix DLL
+
+on: [push]  # Il workflow parte ogni volta che fai un commit
+
+jobs:
+  build:
+    runs-on: windows-latest  # Usa un sistema Windows per la compilazione
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4  # Scarica il codice nel runner
+
+    - name: Install MinGW
+      run: choco install mingw -y  # Installa il compilatore MinGW
+
+    - name: Compile DLL
+      run: g++ -shared -o WoLongFix.dll dllmain.cpp -static-libgcc -static-libstdc++
+
+    - name: Upload DLL
+      uses: actions/upload-artifact@v4  # Salva la DLL compilata
+      with:
+        name: WoLongFix
+        path: WoLongFix.dll
